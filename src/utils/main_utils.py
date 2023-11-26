@@ -1,0 +1,65 @@
+import sys
+from typing import Dict, Tuple
+import os
+import pandas as pd
+import pickle
+import yaml
+import boto3
+
+from src.constant import *
+from src.exception import CustomException
+from src.logger import logging
+
+class MainUtils:
+    def __init__(self) -> None:
+        pass
+    def read_yaml_file(self,filename:str)->dict:
+        try:
+            with open(filename,"rb") as yaml_file:
+                return yaml.safe_load(yaml_file)
+        except Exception as e:
+            raise CustomException(e,sys) from e
+        
+    def read_schema_config_file(self)->dict:
+        try:
+            schema_config=self.read_yaml_file(os.path.join("config","schema.yaml"))
+            return schema_config
+        except Exception as e:
+            raise CustomException(e,sys) from e
+        
+    @staticmethod
+    def save_object(obj,filepath):
+        logging.info("Saving object")
+        try:
+            with open(filepath,"wb") as file:
+                pickle.dump(obj,file)
+            logging.info("Object saved")
+        except Exception as e:
+            raise CustomException(e,sys) from e
+        
+    @staticmethod
+    def load_object(filepath):
+        logging.info("Loading object")
+        try:
+            with open(filepath,"rb") as file:
+                obj=pickle.load(file)
+            logging.info("Object loaded")
+            return obj
+        except Exception as e:
+            raise CustomException(e,sys) from e
+    
+    @staticmethod
+
+    def load_object(file_path: str) -> object:
+        logging.info("Entered the load_object method of MainUtils class")
+
+        try:
+            with open(file_path, "rb") as file_obj:
+                obj = pickle.load(file_obj)
+
+            logging.info("Exited the load_object method of MainUtils class")
+
+            return obj
+
+        except Exception as e:
+            raise CustomException(e, sys) from e
